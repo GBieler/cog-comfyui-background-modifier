@@ -54,58 +54,94 @@ class Predictor(BasePredictor):
     def update_workflow(self, workflow, **kwargs):
         # Below is an example showing how to get the node you need and update the inputs
 
-        # positive_prompt = workflow["6"]["inputs"]
-        # positive_prompt["text"] = kwargs["prompt"]
+        background_prompt = workflow["13"]["inputs"]
+        background_prompt["text"] = kwargs["background_prompt"]
 
-        # negative_prompt = workflow["7"]["inputs"]
-        # negative_prompt["text"] = f"nsfw, {kwargs['negative_prompt']}"
+        light_prompt = workflow["15"]["inputs"]
+        light_prompt["text"] = kwargs['light_prompt']
 
-        # sampler = workflow["3"]["inputs"]
-        # sampler["seed"] = kwargs["seed"]
-        pass
+        denoise_strength = workflow["46"]["inputs"]
+        denoise_strength["value"] = kwargs["denoise_strength"]
+
+        if kwargs['subject_image_filename']:
+            load_subject_image = workflow["1"]["inputs"]
+            load_subject_image["image"] = kwargs["subject_image_filename"]
+
+        if kwargs['background_image_filename']:
+            load_background_image = workflow["8"]["inputs"]
+            load_background_image["image"] = kwargs["background_image_filename"]
+        
+        if kwargs['light_mask_filename']:
+            load_light_mask_image = workflow["9"]["inputs"]
+            load_light_mask_image["image"] = kwargs["light_mask_filename"]
 
     def predict(
         self,
-        prompt: str = Input(
+        background_prompt: str = Input(
+            description="Description of the background",
             default="",
         ),
-        negative_prompt: str = Input(
-            description="Things you do not want to see in your image",
+        light_prompt: str = Input(
+            description="Description of the lighting",
             default="",
         ),
-        image: Path = Input(
-            description="An input image",
+        subject_image: Path = Input(
+            description="Subject image",
             default=None,
         ),
-        output_format: str = optimise_images.predict_output_format(),
-        output_quality: int = optimise_images.predict_output_quality(),
-        seed: int = seed_helper.predict_seed(),
+        background_image: Path = Input(
+            description="Background image (optional)",
+            default=None,
+        ),
+        light_mask: Path = Input(
+            description="Light mask image (optional)",
+            default=None,
+        ),
+        denoise_strength: float = Input(
+            description="Background variation strength",
+            default=0.7,
+            ge=0.1,
+            le=1,
+        ),
     ) -> List[Path]:
         """Run a single prediction on the model"""
         self.comfyUI.cleanup(ALL_DIRECTORIES)
 
         # Make sure to set the seeds in your workflow
-        seed = seed_helper.generate(seed)
-
-        image_filename = None
-        if image:
-            image_filename = self.filename_with_extension(image, "image")
-            self.handle_input_file(image, image_filename)
+        # seed = seed_helper.generate(seed)
+        
+        subject_image_filename = None
+        background_image_filename = None
+        light_mask_filename = None
+        if subject_image:
+            subject_image_filename = self.filename_with_extension(subject_image, "image")
+            self.handle_input_file(subject_image, subject_image_filename)
+        if background_image:
+            background_image_filename = self.filename_with_extension(background_image, "image")
+            self.handle_input_file(background_image, background_image_filename)
+        if light_mask:
+            light_mask_filename = self.filename_with_extension(light_mask, "image")
+            self.handle_input_file(light_mask, light_mask_filename)
 
         with open(api_json_file, "r") as file:
             workflow = json.loads(file.read())
 
         self.update_workflow(
             workflow,
-            prompt=prompt,
-            negative_prompt=negative_prompt,
-            image_filename=image_filename,
-            seed=seed,
+            background_prompt=background_prompt,
+            light_prompt=light_prompt,
+            subject_image_filename=subject_image_filename,
+            background_image_filename=background_image_filename,
+            light_mask_filename=light_mask_filename,
+            denoise_strength=denoise_strength
         )
 
         wf = self.comfyUI.load_workflow(workflow)
         self.comfyUI.connect()
         self.comfyUI.run_workflow(wf)
+        output_format="png"
+        output_quality=80
+        
 
         return optimise_images.optimise_image_files(
             output_format, output_quality, self.comfyUI.get_files(OUTPUT_DIR)

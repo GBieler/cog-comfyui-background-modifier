@@ -3,7 +3,7 @@ from PIL import Image
 
 IMAGE_FILE_EXTENSIONS = [".jpg", ".jpeg", ".png"]
 FORMAT_CHOICES = ["webp", "jpg", "png"]
-DEFAULT_FORMAT = "webp"
+DEFAULT_FORMAT = "png"
 DEFAULT_QUALITY = 80
 
 
