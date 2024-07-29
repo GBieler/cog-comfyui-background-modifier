@@ -63,6 +63,12 @@ class Predictor(BasePredictor):
         denoise_strength = workflow["46"]["inputs"]
         denoise_strength["value"] = kwargs["denoise_strength"]
 
+        IC_light_scheduler_seed = workflow["91"]["inputs"]
+        IC_light_scheduler_seed["seed"] = kwargs["seed_IC_light"]
+
+        IP_adapter_scheduler_seed = workflow["45"]["inputs"]
+        IP_adapter_scheduler_seed["seed"] = kwargs["seed_IP_adapter"]
+
         if kwargs['subject_image_filename']:
             load_subject_image = workflow["1"]["inputs"]
             load_subject_image["image"] = kwargs["subject_image_filename"]
@@ -77,25 +83,25 @@ class Predictor(BasePredictor):
 
     def predict(
         self,
-        background_prompt: str = Input(
-            description="Description of the background",
-            default="",
-        ),
-        light_prompt: str = Input(
-            description="Description of the lighting",
-            default="",
-        ),
         subject_image: Path = Input(
-            description="Subject image",
+            description="Image with the subject",
             default=None,
         ),
         background_image: Path = Input(
-            description="Background image (optional)",
+            description="Image to use as a reference for the background (optional)",
             default=None,
         ),
+        background_prompt: str = Input(
+            description="Description of the background (optional)",
+            default="",
+        ),
+        light_prompt: str = Input(
+            description="Description of the lighting (optional)",
+            default="",
+        ),
         light_mask: Path = Input(
-            description="Light mask image (optional)",
-            default=None,
+            description="Mask to use as a reference for the lighting (optional)",
+            default="https://projectsgb.s3.amazonaws.com/test_images/lightMask.png",
         ),
         denoise_strength: float = Input(
             description="Background variation strength",
@@ -107,8 +113,11 @@ class Predictor(BasePredictor):
         """Run a single prediction on the model"""
         self.comfyUI.cleanup(ALL_DIRECTORIES)
 
-        # Make sure to set the seeds in your workflow
-        # seed = seed_helper.generate(seed)
+        seed_IC_light = None
+        seed_IP_adapter = None
+        seed_IC_light = seed_helper.generate(seed_IC_light)
+        seed_IP_adapter  = seed_helper.generate(seed_IP_adapter)
+
         
         subject_image_filename = None
         background_image_filename = None
@@ -116,6 +125,8 @@ class Predictor(BasePredictor):
         if subject_image:
             subject_image_filename = self.filename_with_extension(subject_image, "image")
             self.handle_input_file(subject_image, subject_image_filename)
+        else:
+            raise ValueError("Please upload a subject image before continuing")
         if background_image:
             background_image_filename = self.filename_with_extension(background_image, "image")
             self.handle_input_file(background_image, background_image_filename)
@@ -133,7 +144,9 @@ class Predictor(BasePredictor):
             subject_image_filename=subject_image_filename,
             background_image_filename=background_image_filename,
             light_mask_filename=light_mask_filename,
-            denoise_strength=denoise_strength
+            denoise_strength=denoise_strength,
+            seed_IC_light=seed_IC_light,
+            seed_IP_adapter=seed_IP_adapter
         )
 
         wf = self.comfyUI.load_workflow(workflow)

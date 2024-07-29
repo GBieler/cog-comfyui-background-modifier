@@ -1,7 +1,7 @@
 {
   "1": {
     "inputs": {
-      "image": "https://projectsgb.s3.amazonaws.com/test_images/astronaut.png",
+      "image": "",
       "upload": "image"
     },
     "class_type": "LoadImage",
@@ -60,7 +60,7 @@
   },
   "8": {
     "inputs": {
-      "image": "https://projectsgb.s3.amazonaws.com/test_images/background.png",
+      "image": "",
       "upload": "image"
     },
     "class_type": "LoadImage",
@@ -70,7 +70,7 @@
   },
   "9": {
     "inputs": {
-      "image": "https://projectsgb.s3.amazonaws.com/test_images/lightMask.png",
+      "image": "",
       "channel": "red",
       "upload": "image"
     },
@@ -81,7 +81,7 @@
   },
   "13": {
     "inputs": {
-      "text": "astronaut floating with magical city in background",
+      "text": "",
       "clip": [
         "17",
         1
@@ -94,7 +94,7 @@
   },
   "15": {
     "inputs": {
-      "text": "sunlight",
+      "text": "",
       "clip": [
         "88",
         1
