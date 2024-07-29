@@ -1,0 +1,1720 @@
+{
+  "1": {
+    "inputs": {
+      "image": "https://projectsgb.s3.amazonaws.com/test_images/astronaut.png",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Place Subject Here"
+    }
+  },
+  "2": {
+    "inputs": {
+      "megapixels": 1.5,
+      "images": [
+        "1",
+        0
+      ]
+    },
+    "class_type": "ImageScaleToMegapixels",
+    "_meta": {
+      "title": "Scale To Megapixels"
+    }
+  },
+  "3": {
+    "inputs": {
+      "image": [
+        "2",
+        0
+      ]
+    },
+    "class_type": "Image Size to Number",
+    "_meta": {
+      "title": "Image Size to Number"
+    }
+  },
+  "4": {
+    "inputs": {
+      "number": [
+        "3",
+        0
+      ]
+    },
+    "class_type": "Number to Int",
+    "_meta": {
+      "title": "Width"
+    }
+  },
+  "5": {
+    "inputs": {
+      "number": [
+        "3",
+        1
+      ]
+    },
+    "class_type": "Number to Int",
+    "_meta": {
+      "title": "Height"
+    }
+  },
+  "8": {
+    "inputs": {
+      "image": "https://projectsgb.s3.amazonaws.com/test_images/background.png",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "(Optional) Place Background here"
+    }
+  },
+  "9": {
+    "inputs": {
+      "image": "https://projectsgb.s3.amazonaws.com/test_images/lightMask.png",
+      "channel": "red",
+      "upload": "image"
+    },
+    "class_type": "LoadImageMask",
+    "_meta": {
+      "title": "(Optional) Place Light Mask Here"
+    }
+  },
+  "13": {
+    "inputs": {
+      "text": "astronaut floating with magical city in background",
+      "clip": [
+        "17",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "15": {
+    "inputs": {
+      "text": "sunlight",
+      "clip": [
+        "88",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "17": {
+    "inputs": {
+      "ckpt_name": "epicrealism_naturalSinRC1VAE.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "18": {
+    "inputs": {
+      "text": "natural light, advertising photo of a ",
+      "clip": [
+        "17",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "19": {
+    "inputs": {
+      "conditioning_to": [
+        "18",
+        0
+      ],
+      "conditioning_from": [
+        "13",
+        0
+      ]
+    },
+    "class_type": "ConditioningConcat",
+    "_meta": {
+      "title": "Conditioning (Concat)"
+    }
+  },
+  "20": {
+    "inputs": {
+      "text": "watermark, deformed, bad anatomy",
+      "clip": [
+        "17",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "21": {
+    "inputs": {
+      "width": [
+        "4",
+        0
+      ],
+      "height": [
+        "5",
+        0
+      ],
+      "x": 0,
+      "y": 0,
+      "image": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "ImageCrop",
+    "_meta": {
+      "title": "ImageCrop"
+    }
+  },
+  "22": {
+    "inputs": {
+      "boolean": true,
+      "on_true": [
+        "21",
+        0
+      ],
+      "on_false": [
+        "23",
+        0
+      ]
+    },
+    "class_type": "Switch any [Crystools]",
+    "_meta": {
+      "title": "Did you input a background?"
+    }
+  },
+  "23": {
+    "inputs": {
+      "height": [
+        "5",
+        0
+      ],
+      "width": [
+        "4",
+        0
+      ],
+      "interpolation_mode": "bicubic",
+      "image": [
+        "2",
+        0
+      ]
+    },
+    "class_type": "JWImageResize",
+    "_meta": {
+      "title": "Image Resize"
+    }
+  },
+  "24": {
+    "inputs": {
+      "boolean": true,
+      "on_true": [
+        "75",
+        0
+      ],
+      "on_false": [
+        "55",
+        0
+      ]
+    },
+    "class_type": "Switch any [Crystools]",
+    "_meta": {
+      "title": "Did you input a Light Mask?"
+    }
+  },
+  "25": {
+    "inputs": {
+      "model_name": "GroundingDINO_SwinT_OGC (694MB)"
+    },
+    "class_type": "GroundingDinoModelLoader (segment anything)",
+    "_meta": {
+      "title": "GroundingDinoModelLoader (segment anything)"
+    }
+  },
+  "26": {
+    "inputs": {
+      "model_name": "sam_hq_vit_h (2.57GB)"
+    },
+    "class_type": "SAMModelLoader (segment anything)",
+    "_meta": {
+      "title": "SAMModelLoader (segment anything)"
+    }
+  },
+  "27": {
+    "inputs": {
+      "mask": [
+        "30",
+        0
+      ]
+    },
+    "class_type": "MaskToImage",
+    "_meta": {
+      "title": "Convert Mask to Image"
+    }
+  },
+  "28": {
+    "inputs": {
+      "images": [
+        "29",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "29": {
+    "inputs": {
+      "prompt": "subject",
+      "threshold": 0.3,
+      "sam_model": [
+        "26",
+        0
+      ],
+      "grounding_dino_model": [
+        "25",
+        0
+      ],
+      "image": [
+        "23",
+        0
+      ]
+    },
+    "class_type": "GroundingDinoSAMSegment (segment anything)",
+    "_meta": {
+      "title": "GroundingDinoSAMSegment (segment anything)"
+    }
+  },
+  "30": {
+    "inputs": {
+      "expand": -1,
+      "incremental_expandrate": 0,
+      "tapered_corners": true,
+      "flip_input": false,
+      "blur_radius": 0.5,
+      "lerp_alpha": 1,
+      "decay_factor": 1,
+      "fill_holes": false,
+      "mask": [
+        "29",
+        1
+      ]
+    },
+    "class_type": "GrowMaskWithBlur",
+    "_meta": {
+      "title": "Grow Mask With Blur"
+    }
+  },
+  "31": {
+    "inputs": {
+      "images": [
+        "27",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "32": {
+    "inputs": {
+      "height": [
+        "5",
+        0
+      ],
+      "width": [
+        "4",
+        0
+      ],
+      "interpolation_mode": "bicubic",
+      "image": [
+        "27",
+        0
+      ]
+    },
+    "class_type": "JWImageResize",
+    "_meta": {
+      "title": "Image Resize"
+    }
+  },
+  "33": {
+    "inputs": {
+      "height": [
+        "5",
+        0
+      ],
+      "width": [
+        "4",
+        0
+      ],
+      "interpolation_mode": "bicubic",
+      "image": [
+        "22",
+        0
+      ]
+    },
+    "class_type": "JWImageResize",
+    "_meta": {
+      "title": "Image Resize"
+    }
+  },
+  "34": {
+    "inputs": {
+      "blend_percentage": 1,
+      "image_a": [
+        "33",
+        0
+      ],
+      "image_b": [
+        "23",
+        0
+      ],
+      "mask": [
+        "32",
+        0
+      ]
+    },
+    "class_type": "Image Blend by Mask",
+    "_meta": {
+      "title": "Image Blend by Mask"
+    }
+  },
+  "35": {
+    "inputs": {
+      "images": [
+        "172",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "38": {
+    "inputs": {
+      "strength": 0.85,
+      "conditioning": [
+        "19",
+        0
+      ],
+      "control_net": [
+        "39",
+        0
+      ],
+      "image": [
+        "42",
+        0
+      ]
+    },
+    "class_type": "ControlNetApply",
+    "_meta": {
+      "title": "Apply ControlNet"
+    }
+  },
+  "39": {
+    "inputs": {
+      "control_net_name": "control_v11f1p_sd15_depth.pth"
+    },
+    "class_type": "ControlNetLoader",
+    "_meta": {
+      "title": "Load ControlNet Model"
+    }
+  },
+  "42": {
+    "inputs": {
+      "ckpt_name": "depth_anything_vitl14.pth",
+      "resolution": 512,
+      "image": [
+        "23",
+        0
+      ]
+    },
+    "class_type": "DepthAnythingPreprocessor",
+    "_meta": {
+      "title": "Depth Anything"
+    }
+  },
+  "43": {
+    "inputs": {
+      "images": [
+        "42",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "44": {
+    "inputs": {
+      "pixels": [
+        "172",
+        0
+      ],
+      "vae": [
+        "17",
+        2
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE Encode"
+    }
+  },
+  "45": {
+    "inputs": {
+      "seed": 1031590226282313,
+      "steps": 20,
+      "cfg": 6,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "denoise": [
+        "46",
+        0
+      ],
+      "model": [
+        "50",
+        0
+      ],
+      "positive": [
+        "38",
+        0
+      ],
+      "negative": [
+        "20",
+        0
+      ],
+      "latent_image": [
+        "44",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "46": {
+    "inputs": {
+      "value": 0.7000000000000001
+    },
+    "class_type": "Float-🔬",
+    "_meta": {
+      "title": "Denoise (0.1-1.0)"
+    }
+  },
+  "49": {
+    "inputs": {
+      "preset": "PLUS (high strength)",
+      "model": [
+        "17",
+        0
+      ]
+    },
+    "class_type": "IPAdapterUnifiedLoader",
+    "_meta": {
+      "title": "IPAdapter Unified Loader"
+    }
+  },
+  "50": {
+    "inputs": {
+      "weight": 0.3,
+      "weight_type": "linear",
+      "combine_embeds": "concat",
+      "start_at": 0,
+      "end_at": 1,
+      "embeds_scaling": "V only",
+      "model": [
+        "49",
+        0
+      ],
+      "ipadapter": [
+        "49",
+        1
+      ],
+      "image": [
+        "172",
+        0
+      ]
+    },
+    "class_type": "IPAdapterAdvanced",
+    "_meta": {
+      "title": "IPAdapter Advanced"
+    }
+  },
+  "51": {
+    "inputs": {
+      "samples": [
+        "45",
+        0
+      ],
+      "vae": [
+        "17",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "52": {
+    "inputs": {
+      "images": [
+        "51",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "53": {
+    "inputs": {
+      "blend_percentage": 1,
+      "image_a": [
+        "171",
+        0
+      ],
+      "image_b": [
+        "172",
+        0
+      ],
+      "mask": [
+        "32",
+        0
+      ]
+    },
+    "class_type": "Image Blend by Mask",
+    "_meta": {
+      "title": "Image Blend by Mask"
+    }
+  },
+  "54": {
+    "inputs": {
+      "images": [
+        "53",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "55": {
+    "inputs": {
+      "pixels": [
+        "78",
+        0
+      ],
+      "vae": [
+        "88",
+        2
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE Encode"
+    }
+  },
+  "56": {
+    "inputs": {
+      "expand": 0,
+      "incremental_expandrate": 0,
+      "tapered_corners": true,
+      "flip_input": false,
+      "blur_radius": 0,
+      "lerp_alpha": 1,
+      "decay_factor": 1,
+      "fill_holes": false,
+      "mask": [
+        "60",
+        7
+      ]
+    },
+    "class_type": "GrowMaskWithBlur",
+    "_meta": {
+      "title": "Grow Mask With Blur"
+    }
+  },
+  "57": {
+    "inputs": {
+      "min": 0,
+      "max": 1.02,
+      "mask": [
+        "56",
+        0
+      ]
+    },
+    "class_type": "RemapMaskRange",
+    "_meta": {
+      "title": "Remap Mask Range"
+    }
+  },
+  "58": {
+    "inputs": {
+      "mask": [
+        "57",
+        0
+      ]
+    },
+    "class_type": "MaskToImage",
+    "_meta": {
+      "title": "Convert Mask to Image"
+    }
+  },
+  "60": {
+    "inputs": {
+      "threshold_r": [
+        "116",
+        0
+      ],
+      "threshold_g": [
+        "116",
+        0
+      ],
+      "threshold_b": [
+        "116",
+        0
+      ],
+      "image": [
+        "53",
+        0
+      ]
+    },
+    "class_type": "MaskFromRGBCMYBW+",
+    "_meta": {
+      "title": "🔧 Mask From RGB/CMY/BW"
+    }
+  },
+  "61": {
+    "inputs": {
+      "mask": [
+        "60",
+        7
+      ]
+    },
+    "class_type": "MaskToImage",
+    "_meta": {
+      "title": "Convert Mask to Image"
+    }
+  },
+  "62": {
+    "inputs": {
+      "images": [
+        "77",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "71": {
+    "inputs": {
+      "mask": [
+        "74",
+        0
+      ]
+    },
+    "class_type": "MaskToImage",
+    "_meta": {
+      "title": "Convert Mask to Image"
+    }
+  },
+  "73": {
+    "inputs": {
+      "min": 0,
+      "max": 1.06,
+      "mask": [
+        "9",
+        0
+      ]
+    },
+    "class_type": "RemapMaskRange",
+    "_meta": {
+      "title": "Remap Mask Range"
+    }
+  },
+  "74": {
+    "inputs": {
+      "expand": 0,
+      "incremental_expandrate": 0,
+      "tapered_corners": true,
+      "flip_input": false,
+      "blur_radius": 30,
+      "lerp_alpha": 1,
+      "decay_factor": 1,
+      "fill_holes": false,
+      "mask": [
+        "73",
+        0
+      ]
+    },
+    "class_type": "GrowMaskWithBlur",
+    "_meta": {
+      "title": "Grow Mask With Blur"
+    }
+  },
+  "75": {
+    "inputs": {
+      "pixels": [
+        "81",
+        0
+      ],
+      "vae": [
+        "88",
+        2
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE Encode"
+    }
+  },
+  "77": {
+    "inputs": {
+      "height": [
+        "5",
+        0
+      ],
+      "width": [
+        "4",
+        0
+      ],
+      "interpolation_mode": "bicubic",
+      "image": [
+        "61",
+        0
+      ]
+    },
+    "class_type": "JWImageResize",
+    "_meta": {
+      "title": "Image Resize"
+    }
+  },
+  "78": {
+    "inputs": {
+      "height": [
+        "5",
+        0
+      ],
+      "width": [
+        "4",
+        0
+      ],
+      "interpolation_mode": "bicubic",
+      "image": [
+        "58",
+        0
+      ]
+    },
+    "class_type": "JWImageResize",
+    "_meta": {
+      "title": "Image Resize"
+    }
+  },
+  "81": {
+    "inputs": {
+      "height": [
+        "5",
+        0
+      ],
+      "width": [
+        "4",
+        0
+      ],
+      "interpolation_mode": "bicubic",
+      "image": [
+        "71",
+        0
+      ]
+    },
+    "class_type": "JWImageResize",
+    "_meta": {
+      "title": "Image Resize"
+    }
+  },
+  "85": {
+    "inputs": {
+      "height": [
+        "5",
+        0
+      ],
+      "width": [
+        "4",
+        0
+      ],
+      "interpolation_mode": "bicubic",
+      "image": [
+        "53",
+        0
+      ]
+    },
+    "class_type": "JWImageResize",
+    "_meta": {
+      "title": "Image Resize"
+    }
+  },
+  "86": {
+    "inputs": {
+      "text": "desaturated, sepia, white",
+      "clip": [
+        "88",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "87": {
+    "inputs": {
+      "model_path": "iclight_sd15_fc.safetensors",
+      "model": [
+        "88",
+        0
+      ]
+    },
+    "class_type": "LoadAndApplyICLightUnet",
+    "_meta": {
+      "title": "Load And Apply IC-Light"
+    }
+  },
+  "88": {
+    "inputs": {
+      "ckpt_name": "epicrealism_naturalSinRC1VAE.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "91": {
+    "inputs": {
+      "seed": 100361857014344,
+      "steps": 30,
+      "cfg": [
+        "111",
+        0
+      ],
+      "sampler_name": "dpmpp_2m_sde",
+      "scheduler": "karras",
+      "denoise": 1,
+      "model": [
+        "87",
+        0
+      ],
+      "positive": [
+        "92",
+        0
+      ],
+      "negative": [
+        "92",
+        1
+      ],
+      "latent_image": [
+        "24",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "92": {
+    "inputs": {
+      "multiplier": 0.156,
+      "positive": [
+        "15",
+        0
+      ],
+      "negative": [
+        "86",
+        0
+      ],
+      "vae": [
+        "88",
+        2
+      ],
+      "foreground": [
+        "93",
+        0
+      ]
+    },
+    "class_type": "ICLightConditioning",
+    "_meta": {
+      "title": "IC-Light Conditioning"
+    }
+  },
+  "93": {
+    "inputs": {
+      "pixels": [
+        "85",
+        0
+      ],
+      "vae": [
+        "88",
+        2
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE Encode"
+    }
+  },
+  "94": {
+    "inputs": {
+      "samples": [
+        "91",
+        0
+      ],
+      "vae": [
+        "88",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "96": {
+    "inputs": {
+      "image": "$96-0",
+      "images": [
+        "94",
+        0
+      ]
+    },
+    "class_type": "PreviewBridge",
+    "_meta": {
+      "title": "Preview Bridge (Image)"
+    }
+  },
+  "97": {
+    "inputs": {
+      "height": [
+        "5",
+        0
+      ],
+      "width": [
+        "4",
+        0
+      ],
+      "interpolation_mode": "bicubic",
+      "image": [
+        "96",
+        0
+      ]
+    },
+    "class_type": "JWImageResize",
+    "_meta": {
+      "title": "Image Resize"
+    }
+  },
+  "111": {
+    "inputs": {
+      "float": 2.4000000000000004
+    },
+    "class_type": "Cfg Literal",
+    "_meta": {
+      "title": "Relight CFG (1.2-3.5)"
+    }
+  },
+  "116": {
+    "inputs": {
+      "value": 0.2
+    },
+    "class_type": "Float-🔬",
+    "_meta": {
+      "title": "White Point"
+    }
+  },
+  "117": {
+    "inputs": {
+      "min": 0,
+      "max": 1,
+      "clamp": true,
+      "image": [
+        "153",
+        1
+      ]
+    },
+    "class_type": "RemapImageRange",
+    "_meta": {
+      "title": "Remap Image Range"
+    }
+  },
+  "118": {
+    "inputs": {
+      "min": -0.2,
+      "max": 0.8,
+      "clamp": true,
+      "image": [
+        "153",
+        1
+      ]
+    },
+    "class_type": "RemapImageRange",
+    "_meta": {
+      "title": "Remap Image Range"
+    }
+  },
+  "119": {
+    "inputs": {
+      "min": -0.4,
+      "max": 0.6,
+      "clamp": true,
+      "image": [
+        "153",
+        1
+      ]
+    },
+    "class_type": "RemapImageRange",
+    "_meta": {
+      "title": "Remap Image Range"
+    }
+  },
+  "120": {
+    "inputs": {
+      "min": -0.6,
+      "max": 0.4,
+      "clamp": true,
+      "image": [
+        "153",
+        1
+      ]
+    },
+    "class_type": "RemapImageRange",
+    "_meta": {
+      "title": "Remap Image Range"
+    }
+  },
+  "121": {
+    "inputs": {
+      "blur_type": "guidedFilter",
+      "blur_size": [
+        "125",
+        0
+      ],
+      "factor": 1,
+      "images": [
+        "148",
+        1
+      ],
+      "reference": [
+        "117",
+        0
+      ]
+    },
+    "class_type": "ColorMatchImage",
+    "_meta": {
+      "title": "Color Match Image"
+    }
+  },
+  "122": {
+    "inputs": {
+      "blur_type": "guidedFilter",
+      "blur_size": [
+        "125",
+        0
+      ],
+      "factor": 1,
+      "images": [
+        "148",
+        1
+      ],
+      "reference": [
+        "118",
+        0
+      ]
+    },
+    "class_type": "ColorMatchImage",
+    "_meta": {
+      "title": "Color Match Image"
+    }
+  },
+  "123": {
+    "inputs": {
+      "blur_type": "guidedFilter",
+      "blur_size": [
+        "125",
+        0
+      ],
+      "factor": 1,
+      "images": [
+        "148",
+        1
+      ],
+      "reference": [
+        "119",
+        0
+      ]
+    },
+    "class_type": "ColorMatchImage",
+    "_meta": {
+      "title": "Color Match Image"
+    }
+  },
+  "124": {
+    "inputs": {
+      "blur_type": "guidedFilter",
+      "blur_size": [
+        "125",
+        0
+      ],
+      "factor": 1,
+      "images": [
+        "148",
+        1
+      ],
+      "reference": [
+        "120",
+        0
+      ]
+    },
+    "class_type": "ColorMatchImage",
+    "_meta": {
+      "title": "Color Match Image"
+    }
+  },
+  "125": {
+    "inputs": {
+      "value": 24
+    },
+    "class_type": "Int-🔬",
+    "_meta": {
+      "title": "Int"
+    }
+  },
+  "135": {
+    "inputs": {
+      "operation": "mean",
+      "images": [
+        "136",
+        0
+      ]
+    },
+    "class_type": "BatchAverageImage",
+    "_meta": {
+      "title": "Batch Average Image"
+    }
+  },
+  "136": {
+    "inputs": {
+      "inputcount": 5,
+      "Update inputs": null,
+      "image_1": [
+        "121",
+        0
+      ],
+      "image_2": [
+        "122",
+        0
+      ],
+      "image_3": [
+        "123",
+        0
+      ],
+      "image_4": [
+        "124",
+        0
+      ],
+      "image_5": [
+        "153",
+        1
+      ]
+    },
+    "class_type": "ImageBatchMulti",
+    "_meta": {
+      "title": "Image Batch Multi"
+    }
+  },
+  "137": {
+    "inputs": {
+      "operation": "mean",
+      "images": [
+        "138",
+        0
+      ]
+    },
+    "class_type": "BatchAverageImage",
+    "_meta": {
+      "title": "Batch Average Image"
+    }
+  },
+  "138": {
+    "inputs": {
+      "image1": [
+        "148",
+        1
+      ],
+      "image2": [
+        "135",
+        0
+      ]
+    },
+    "class_type": "ImageBatch",
+    "_meta": {
+      "title": "Batch Images"
+    }
+  },
+  "139": {
+    "inputs": {
+      "min": -0.15,
+      "max": 1.45,
+      "clamp": true,
+      "image": [
+        "154",
+        0
+      ]
+    },
+    "class_type": "RemapImageRange",
+    "_meta": {
+      "title": "Remap Image Range"
+    }
+  },
+  "140": {
+    "inputs": {
+      "operation": "mean",
+      "images": [
+        "141",
+        0
+      ]
+    },
+    "class_type": "BatchAverageImage",
+    "_meta": {
+      "title": "Batch Average Image"
+    }
+  },
+  "141": {
+    "inputs": {
+      "image1": [
+        "153",
+        1
+      ],
+      "image2": [
+        "148",
+        1
+      ]
+    },
+    "class_type": "ImageBatch",
+    "_meta": {
+      "title": "Batch Images"
+    }
+  },
+  "142": {
+    "inputs": {
+      "rgthree_comparer": {
+        "images": [
+          {
+            "name": "A",
+            "selected": true,
+            "url": "/view?filename=rgthree.compare._temp_inaxh_00001_.png&type=temp&subfolder=&rand=0.5761015934881828"
+          },
+          {
+            "name": "B",
+            "selected": true,
+            "url": "/view?filename=rgthree.compare._temp_inaxh_00002_.png&type=temp&subfolder=&rand=0.6996728158771723"
+          }
+        ]
+      },
+      "image_a": [
+        "159",
+        0
+      ],
+      "image_b": [
+        "53",
+        0
+      ]
+    },
+    "class_type": "Image Comparer (rgthree)",
+    "_meta": {
+      "title": "Image Comparer (rgthree)"
+    }
+  },
+  "143": {
+    "inputs": {
+      "rgthree_comparer": {
+        "images": [
+          {
+            "name": "A",
+            "selected": true,
+            "url": "/view?filename=rgthree.compare._temp_ivcxm_00001_.png&type=temp&subfolder=&rand=0.6836673388472452"
+          },
+          {
+            "name": "B",
+            "selected": true,
+            "url": "/view?filename=rgthree.compare._temp_ivcxm_00002_.png&type=temp&subfolder=&rand=0.40610746436236966"
+          }
+        ]
+      },
+      "image_a": [
+        "139",
+        0
+      ],
+      "image_b": [
+        "53",
+        0
+      ]
+    },
+    "class_type": "Image Comparer (rgthree)",
+    "_meta": {
+      "title": "Image Comparer (rgthree)"
+    }
+  },
+  "144": {
+    "inputs": {
+      "mode": "color",
+      "blend_percentage": 1,
+      "image_a": [
+        "140",
+        0
+      ],
+      "image_b": [
+        "153",
+        1
+      ]
+    },
+    "class_type": "Image Blending Mode",
+    "_meta": {
+      "title": "Color Blending Control"
+    }
+  },
+  "145": {
+    "inputs": {
+      "mode": "hue",
+      "blend_percentage": 1,
+      "image_a": [
+        "144",
+        0
+      ],
+      "image_b": [
+        "153",
+        1
+      ]
+    },
+    "class_type": "Image Blending Mode",
+    "_meta": {
+      "title": "Hue Blending Control"
+    }
+  },
+  "146": {
+    "inputs": {
+      "mode": "color",
+      "blend_percentage": 0.7000000000000001,
+      "image_a": [
+        "137",
+        0
+      ],
+      "image_b": [
+        "153",
+        1
+      ]
+    },
+    "class_type": "Image Blending Mode",
+    "_meta": {
+      "title": "Color Blending Control"
+    }
+  },
+  "147": {
+    "inputs": {
+      "mode": "hue",
+      "blend_percentage": 0.7000000000000001,
+      "image_a": [
+        "146",
+        0
+      ],
+      "image_b": [
+        "153",
+        1
+      ]
+    },
+    "class_type": "Image Blending Mode",
+    "_meta": {
+      "title": "Hue Blending Control"
+    }
+  },
+  "148": {
+    "inputs": {
+      "blur_radius": 3,
+      "image": [
+        "97",
+        0
+      ]
+    },
+    "class_type": "FrequencySeparationHSV",
+    "_meta": {
+      "title": "Frequency Separation HSV Node"
+    }
+  },
+  "149": {
+    "inputs": {
+      "images": [
+        "153",
+        1
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "150": {
+    "inputs": {
+      "images": [
+        "153",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "151": {
+    "inputs": {
+      "images": [
+        "148",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "152": {
+    "inputs": {
+      "images": [
+        "148",
+        1
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "153": {
+    "inputs": {
+      "blur_radius": 3,
+      "image": [
+        "53",
+        0
+      ]
+    },
+    "class_type": "FrequencySeparation",
+    "_meta": {
+      "title": "Frequency Separation Node"
+    }
+  },
+  "154": {
+    "inputs": {
+      "high_freq": [
+        "153",
+        0
+      ],
+      "low_freq": [
+        "147",
+        0
+      ]
+    },
+    "class_type": "FrequencyCombination",
+    "_meta": {
+      "title": "Frequency Combination Node"
+    }
+  },
+  "155": {
+    "inputs": {
+      "high_freq": [
+        "153",
+        0
+      ],
+      "low_freq": [
+        "145",
+        0
+      ]
+    },
+    "class_type": "FrequencyCombination",
+    "_meta": {
+      "title": "Frequency Combination Node"
+    }
+  },
+  "159": {
+    "inputs": {
+      "min": 0,
+      "max": 1.1400000000000001,
+      "clamp": true,
+      "image": [
+        "155",
+        0
+      ]
+    },
+    "class_type": "RemapImageRange",
+    "_meta": {
+      "title": "Remap Image Range"
+    }
+  },
+  "160": {
+    "inputs": {
+      "rgthree_comparer": {
+        "images": [
+          {
+            "name": "A",
+            "selected": true,
+            "url": "/view?filename=rgthree.compare._temp_zaybh_00001_.png&type=temp&subfolder=&rand=0.47709421546538167"
+          },
+          {
+            "name": "B",
+            "selected": true,
+            "url": "/view?filename=rgthree.compare._temp_zaybh_00002_.png&type=temp&subfolder=&rand=0.6093582300265679"
+          }
+        ]
+      },
+      "image_a": [
+        "159",
+        0
+      ],
+      "image_b": [
+        "53",
+        0
+      ]
+    },
+    "class_type": "Image Comparer (rgthree)",
+    "_meta": {
+      "title": "Image Comparer (rgthree)"
+    }
+  },
+  "161": {
+    "inputs": {
+      "rgthree_comparer": {
+        "images": [
+          {
+            "name": "A",
+            "selected": true,
+            "url": "/view?filename=rgthree.compare._temp_atkoh_00001_.png&type=temp&subfolder=&rand=0.2584080150501882"
+          },
+          {
+            "name": "B",
+            "selected": true,
+            "url": "/view?filename=rgthree.compare._temp_atkoh_00002_.png&type=temp&subfolder=&rand=0.30841927749348197"
+          }
+        ]
+      },
+      "image_a": [
+        "139",
+        0
+      ],
+      "image_b": [
+        "53",
+        0
+      ]
+    },
+    "class_type": "Image Comparer (rgthree)",
+    "_meta": {
+      "title": "Image Comparer (rgthree)"
+    }
+  },
+  "164": {
+    "inputs": {
+      "images": [
+        "81",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "169": {
+    "inputs": {
+      "filename_prefix": "ComfyUI",
+      "images": [
+        "139",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  },
+  "170": {
+    "inputs": {
+      "filename_prefix": "ComfyUI",
+      "images": [
+        "159",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  },
+  "171": {
+    "inputs": {
+      "height": [
+        "5",
+        0
+      ],
+      "width": [
+        "4",
+        0
+      ],
+      "interpolation_mode": "bicubic",
+      "image": [
+        "51",
+        0
+      ]
+    },
+    "class_type": "JWImageResize",
+    "_meta": {
+      "title": "Image Resize"
+    }
+  },
+  "172": {
+    "inputs": {
+      "height": [
+        "5",
+        0
+      ],
+      "width": [
+        "4",
+        0
+      ],
+      "interpolation_mode": "bicubic",
+      "image": [
+        "34",
+        0
+      ]
+    },
+    "class_type": "JWImageResize",
+    "_meta": {
+      "title": "Image Resize"
+    }
+  }
+}
