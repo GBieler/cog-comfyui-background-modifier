@@ -52,34 +52,54 @@ class Predictor(BasePredictor):
 
     # Update nodes in the JSON workflow to modify your workflow based on the given inputs
     def update_workflow(self, workflow, **kwargs):
-        # Below is an example showing how to get the node you need and update the inputs
+        print("updating parameters")
 
+        print("updating background prompt")
         background_prompt = workflow["13"]["inputs"]
         background_prompt["text"] = kwargs["background_prompt"]
 
+        print("updating light prompt")
         light_prompt = workflow["15"]["inputs"]
         light_prompt["text"] = kwargs['light_prompt']
 
+        print('updating denoise strength')
         denoise_strength = workflow["46"]["inputs"]
         denoise_strength["value"] = kwargs["denoise_strength"]
 
+        print('updating IC light seed')
         IC_light_scheduler_seed = workflow["91"]["inputs"]
         IC_light_scheduler_seed["seed"] = kwargs["seed_IC_light"]
 
+        print('updating IP adapter seed')
         IP_adapter_scheduler_seed = workflow["45"]["inputs"]
         IP_adapter_scheduler_seed["seed"] = kwargs["seed_IP_adapter"]
 
+        print('updating subject image')
         if kwargs['subject_image_filename']:
             load_subject_image = workflow["1"]["inputs"]
             load_subject_image["image"] = kwargs["subject_image_filename"]
 
-        if kwargs['background_image_filename']:
-            load_background_image = workflow["8"]["inputs"]
+        print('updating background image')
+        load_background_image = workflow["8"]["inputs"]
+        if kwargs['background_image_filename']:    
             load_background_image["image"] = kwargs["background_image_filename"]
+        else:
+            load_background_image["image"] = ""
         
+        print('updating light mask image')
         if kwargs['light_mask_filename']:
             load_light_mask_image = workflow["9"]["inputs"]
             load_light_mask_image["image"] = kwargs["light_mask_filename"]
+        else:
+            ligth_mask_logic_gate = workflow["24"]["inputs"]
+            ligth_mask_logic_gate['boolean'] = False
+            del workflow["9"]
+            del workflow["71"]
+            del workflow["73"]
+            del workflow["74"]
+            del workflow["75"]
+            del workflow["81"]
+            
 
     def predict(
         self,
@@ -149,8 +169,11 @@ class Predictor(BasePredictor):
             seed_IP_adapter=seed_IP_adapter
         )
 
+        print('loading workflow')
         wf = self.comfyUI.load_workflow(workflow)
+        print('launching')
         self.comfyUI.connect()
+        print('Running workflow')
         self.comfyUI.run_workflow(wf)
         output_format="png"
         output_quality=80
