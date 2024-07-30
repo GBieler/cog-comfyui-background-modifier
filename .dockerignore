@@ -26,7 +26,10 @@
 # Files
 scripts/*
 test/*
+test.py
 updated_weights.json
+.venv/
+venv/
 downloaded_user_models/
 
 # Extension files

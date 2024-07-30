@@ -1,7 +1,7 @@
 {
   "1": {
     "inputs": {
-      "image": "https://projectsgb.s3.amazonaws.com/test_images/astronaut.png",
+      "image": "",
       "upload": "image"
     },
     "class_type": "LoadImage",
@@ -60,7 +60,7 @@
   },
   "8": {
     "inputs": {
-      "image": "https://projectsgb.s3.amazonaws.com/test_images/background.png",
+      "image": "",
       "upload": "image"
     },
     "class_type": "LoadImage",
@@ -70,7 +70,7 @@
   },
   "9": {
     "inputs": {
-      "image": "https://projectsgb.s3.amazonaws.com/test_images/lightMask.png",
+      "image": "",
       "channel": "red",
       "upload": "image"
     },
@@ -915,19 +915,6 @@
       "title": "VAE Decode"
     }
   },
-  "96": {
-    "inputs": {
-      "image": "$96-0",
-      "images": [
-        "94",
-        0
-      ]
-    },
-    "class_type": "PreviewBridge",
-    "_meta": {
-      "title": "Preview Bridge (Image)"
-    }
-  },
   "97": {
     "inputs": {
       "height": [
@@ -1240,6 +1227,66 @@
       "title": "Batch Images"
     }
   },
+  "142": {
+    "inputs": {
+      "rgthree_comparer": {
+        "images": [
+          {
+            "name": "A",
+            "selected": true,
+            "url": "/view?filename=rgthree.compare._temp_inaxh_00001_.png&type=temp&subfolder=&rand=0.5761015934881828"
+          },
+          {
+            "name": "B",
+            "selected": true,
+            "url": "/view?filename=rgthree.compare._temp_inaxh_00002_.png&type=temp&subfolder=&rand=0.6996728158771723"
+          }
+        ]
+      },
+      "image_a": [
+        "159",
+        0
+      ],
+      "image_b": [
+        "53",
+        0
+      ]
+    },
+    "class_type": "Image Comparer (rgthree)",
+    "_meta": {
+      "title": "Image Comparer (rgthree)"
+    }
+  },
+  "143": {
+    "inputs": {
+      "rgthree_comparer": {
+        "images": [
+          {
+            "name": "A",
+            "selected": true,
+            "url": "/view?filename=rgthree.compare._temp_ivcxm_00001_.png&type=temp&subfolder=&rand=0.6836673388472452"
+          },
+          {
+            "name": "B",
+            "selected": true,
+            "url": "/view?filename=rgthree.compare._temp_ivcxm_00002_.png&type=temp&subfolder=&rand=0.40610746436236966"
+          }
+        ]
+      },
+      "image_a": [
+        "139",
+        0
+      ],
+      "image_b": [
+        "53",
+        0
+      ]
+    },
+    "class_type": "Image Comparer (rgthree)",
+    "_meta": {
+      "title": "Image Comparer (rgthree)"
+    }
+  },
   "144": {
     "inputs": {
       "mode": "color",
@@ -1325,30 +1372,6 @@
       "title": "Frequency Separation HSV Node"
     }
   },
-  "149": {
-    "inputs": {
-      "images": [
-        "153",
-        1
-      ]
-    },
-    "class_type": "PreviewImage",
-    "_meta": {
-      "title": "Preview Image"
-    }
-  },
-  "150": {
-    "inputs": {
-      "images": [
-        "153",
-        0
-      ]
-    },
-    "class_type": "PreviewImage",
-    "_meta": {
-      "title": "Preview Image"
-    }
-  },
   "153": {
     "inputs": {
       "blur_radius": 3,
@@ -1407,6 +1430,66 @@
     "class_type": "RemapImageRange",
     "_meta": {
       "title": "Remap Image Range"
+    }
+  },
+  "160": {
+    "inputs": {
+      "rgthree_comparer": {
+        "images": [
+          {
+            "name": "A",
+            "selected": true,
+            "url": "/view?filename=rgthree.compare._temp_zaybh_00001_.png&type=temp&subfolder=&rand=0.47709421546538167"
+          },
+          {
+            "name": "B",
+            "selected": true,
+            "url": "/view?filename=rgthree.compare._temp_zaybh_00002_.png&type=temp&subfolder=&rand=0.6093582300265679"
+          }
+        ]
+      },
+      "image_a": [
+        "159",
+        0
+      ],
+      "image_b": [
+        "53",
+        0
+      ]
+    },
+    "class_type": "Image Comparer (rgthree)",
+    "_meta": {
+      "title": "Image Comparer (rgthree)"
+    }
+  },
+  "161": {
+    "inputs": {
+      "rgthree_comparer": {
+        "images": [
+          {
+            "name": "A",
+            "selected": true,
+            "url": "/view?filename=rgthree.compare._temp_atkoh_00001_.png&type=temp&subfolder=&rand=0.2584080150501882"
+          },
+          {
+            "name": "B",
+            "selected": true,
+            "url": "/view?filename=rgthree.compare._temp_atkoh_00002_.png&type=temp&subfolder=&rand=0.30841927749348197"
+          }
+        ]
+      },
+      "image_a": [
+        "139",
+        0
+      ],
+      "image_b": [
+        "53",
+        0
+      ]
+    },
+    "class_type": "Image Comparer (rgthree)",
+    "_meta": {
+      "title": "Image Comparer (rgthree)"
     }
   },
   "169": {

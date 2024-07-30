@@ -52,53 +52,44 @@ class Predictor(BasePredictor):
 
     # Update nodes in the JSON workflow to modify your workflow based on the given inputs
     def update_workflow(self, workflow, **kwargs):
-        print("updating parameters")
+        pass
+        print("updating parameters with: ", kwargs)
 
-        print("updating background prompt")
         background_prompt = workflow["13"]["inputs"]
         background_prompt["text"] = kwargs["background_prompt"]
 
-        print("updating light prompt")
         light_prompt = workflow["15"]["inputs"]
         light_prompt["text"] = kwargs['light_prompt']
 
-        print('updating denoise strength')
         denoise_strength = workflow["46"]["inputs"]
         denoise_strength["value"] = kwargs["denoise_strength"]
 
-        print('updating IC light seed')
         IC_light_scheduler_seed = workflow["91"]["inputs"]
         IC_light_scheduler_seed["seed"] = kwargs["seed_IC_light"]
 
-        print('updating IP adapter seed')
         IP_adapter_scheduler_seed = workflow["45"]["inputs"]
         IP_adapter_scheduler_seed["seed"] = kwargs["seed_IP_adapter"]
 
-        print('updating subject image')
         if kwargs['subject_image_filename']:
             load_subject_image = workflow["1"]["inputs"]
             load_subject_image["image"] = kwargs["subject_image_filename"]
 
-        print('updating background image')
-        load_background_image = workflow["8"]["inputs"]
-        if kwargs['background_image_filename']:    
+        if kwargs['background_image_filename']:
+            load_background_image = workflow["8"]["inputs"] 
             load_background_image["image"] = kwargs["background_image_filename"]
         else:
-            load_background_image["image"] = ""
+            print('No background uploaded, deactivating node')
+            background_logic_gate = workflow["22"]["inputs"]
+            background_logic_gate['boolean'] = False
         
-        print('updating light mask image')
         if kwargs['light_mask_filename']:
             load_light_mask_image = workflow["9"]["inputs"]
             load_light_mask_image["image"] = kwargs["light_mask_filename"]
         else:
+            print('no light mask uploaded, deactivating node')
             ligth_mask_logic_gate = workflow["24"]["inputs"]
             ligth_mask_logic_gate['boolean'] = False
-            del workflow["9"]
-            del workflow["71"]
-            del workflow["73"]
-            del workflow["74"]
-            del workflow["75"]
-            del workflow["81"]
+            
             
 
     def predict(
@@ -121,7 +112,7 @@ class Predictor(BasePredictor):
         ),
         light_mask: Path = Input(
             description="Mask to use as a reference for the lighting (optional)",
-            default="https://projectsgb.s3.amazonaws.com/test_images/lightMask.png",
+            default=None,
         ),
         denoise_strength: float = Input(
             description="Background variation strength",
@@ -142,16 +133,20 @@ class Predictor(BasePredictor):
         subject_image_filename = None
         background_image_filename = None
         light_mask_filename = None
-        if subject_image:
-            subject_image_filename = self.filename_with_extension(subject_image, "image")
+
+        print('subject_image: ', subject_image)
+        print('background_image: ', background_image)
+        if subject_image and subject_image != "":
+            subject_image_filename = self.filename_with_extension(subject_image, "subject_image")
             self.handle_input_file(subject_image, subject_image_filename)
         else:
             raise ValueError("Please upload a subject image before continuing")
-        if background_image:
-            background_image_filename = self.filename_with_extension(background_image, "image")
+        
+        if background_image and background_image != "":
+            background_image_filename = self.filename_with_extension(background_image, "background_image")
             self.handle_input_file(background_image, background_image_filename)
-        if light_mask:
-            light_mask_filename = self.filename_with_extension(light_mask, "image")
+        if light_mask and light_mask != "":
+            light_mask_filename = self.filename_with_extension(light_mask, "light_mask")
             self.handle_input_file(light_mask, light_mask_filename)
 
         with open(api_json_file, "r") as file:
@@ -169,11 +164,10 @@ class Predictor(BasePredictor):
             seed_IP_adapter=seed_IP_adapter
         )
 
-        print('loading workflow')
+        print(workflow)
+
         wf = self.comfyUI.load_workflow(workflow)
-        print('launching')
         self.comfyUI.connect()
-        print('Running workflow')
         self.comfyUI.run_workflow(wf)
         output_format="png"
         output_quality=80
